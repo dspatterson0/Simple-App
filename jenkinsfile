@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout Source Code') {
+            steps {
+                echo 'Checking out source code from GitHub'
+                sh 'git clone https://github.com/dspatterson0/Simple-App.git | tee checkout.log'
+
+                echo 'What did we checkout?'
+                sh 'ls -al'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Running Tests'
+                sh 'make test-app | tee test.log'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building Application'
+                sh 'sudo docker build . -t simple-app:latest | tee build.log'
+            }
+        }
+    }
+}
